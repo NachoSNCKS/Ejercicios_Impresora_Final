@@ -27,71 +27,42 @@ export class Impresora{
     }
     
     //Aqui haremos todos nuestros calculos
-    calcularCosto(ordImpresion : number) : number{
-        let costoEspec = 0
-        let costoColor = 0
-        let costoTipoHoja = 0
-        let cantidadHojas = this.colaImpresion[ordImpresion].cantidad
-        let conColor = this.colaImpresion[ordImpresion].color
-        let tipoDeHoja = this.colaImpresion[ordImpresion].tipo
-
+    calcularCostoColor(ord : number) : number{
+        let conColor = this.colaImpresion[ord].color
         if(conColor == true){
-            costoColor = 1.5
-            if(tipoDeHoja == 0){
-                costoTipoHoja = 3
-            }else if(tipoDeHoja == 1){
-                costoTipoHoja = 2
-            }else if(tipoDeHoja == 2){
-                costoTipoHoja = 1
-            }else if(tipoDeHoja == 3){
-                costoTipoHoja = 0.5
-            }
+            return 1.5
         }else{
-            costoColor = 0.5
-            if(tipoDeHoja == 0){
-                costoTipoHoja = 3
-            }else if(tipoDeHoja == 1){
-                costoTipoHoja = 2
-            }else if(tipoDeHoja == 2){
-                costoTipoHoja = 1
-            }else if(tipoDeHoja == 3){
-                costoTipoHoja = 0.5
-            }
+            return 0.5
         }
-        costoEspec = cantidadHojas * costoTipoHoja * costoColor
-        return costoEspec;
+    }
+    calcularCostoTipoHoja(ord : number){
+        let tipoDeHoja = this.colaImpresion[ord].tipo
+        if (tipoDeHoja == 0){
+            return 3
+        }else if(tipoDeHoja == 1){
+            return 2
+        }else if(tipoDeHoja == 2){
+            return 1
+        }else if(tipoDeHoja == 3){
+            return 0.5
+        }
+    }
+    calcularCosto(ordImpresion : number) : number{
+        let costoColor = this.calcularCostoColor(ordImpresion)
+        let costoTipoHoja = this.calcularCostoTipoHoja(ordImpresion)
+        let cantidadHojas = this.colaImpresion[ordImpresion].cantidad
+        let costoEspec = cantidadHojas * costoTipoHoja * costoColor
+        return costoEspec
     }
     calcularCostoTotal() : number{
         let costoAcum = 0
         let costoColor = 0
         let costoTipoHoja = 0
+        let cantidadHojas = 0
         for (let i = 0; i < this.colaImpresion.length ; i++){
-            let cantidadHojas = this.colaImpresion[i].cantidad
-            let conColor = this.colaImpresion[i].color
-            let tipoDeHoja = this.colaImpresion[i].tipo
-            if(conColor == true){
-                costoColor = 1.5
-                if(tipoDeHoja == 0){
-                    costoTipoHoja = 3
-                }else if(tipoDeHoja == 1){
-                    costoTipoHoja = 2
-                }else if(tipoDeHoja == 2){
-                    costoTipoHoja = 1
-                }else if(tipoDeHoja == 3){
-                    costoTipoHoja = 0.5
-                }
-            }else{
-                costoColor = 0.5
-                if(tipoDeHoja == 0){
-                    costoTipoHoja = 3
-                }else if(tipoDeHoja == 1){
-                    costoTipoHoja = 2
-                }else if(tipoDeHoja == 2){
-                    costoTipoHoja = 1
-                }else if(tipoDeHoja == 3){
-                    costoTipoHoja = 0.5
-                }
-            }
+            costoColor = this.calcularCostoColor(i)
+            costoTipoHoja = this.calcularCostoTipoHoja(i)
+            cantidadHojas = this.colaImpresion[i].cantidad
             costoAcum = costoAcum + cantidadHojas * costoColor * costoTipoHoja
         }
         return costoAcum;
@@ -140,7 +111,7 @@ let main = () => {
     //Mostramos las impresion
     //impresora.mostrarImpresiones()
     //console.log(impresora.calcularCosto(0))
-    console.log(impresora.calcularCostoTotal())
+    console.log("El costo de total de la cola de impresion es: "+impresora.calcularCostoTotal())
 
 }
 main()
